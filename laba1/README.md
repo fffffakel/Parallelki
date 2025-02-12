@@ -1,4 +1,4 @@
-#Makefile:
+# Makefile:
 
 По умолчанию выбран **float**:
 
@@ -18,7 +18,7 @@ make TYPE=double
 
 Result --> Sum:-0.0277862
 
-#CMakeLists:
+# CMakeLists:
 
 Для **float**:
 
