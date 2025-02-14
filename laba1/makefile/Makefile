@@ -1,6 +1,6 @@
 CXX = g++
 TARGET = sum
-SRC = main.cpp
+SRC = ../main.cpp
 
 ifeq ($(TYPE), double)
 	CXXFLAGS += -DUSE_DOUBLE

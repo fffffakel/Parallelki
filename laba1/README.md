@@ -1,5 +1,7 @@
 # Makefile:
 
+Сборщик Makefile находится в папке makefile
+
 По умолчанию выбран **float**:
 
 ```
@@ -19,6 +21,8 @@ make TYPE=double
 Result --> Sum:-0.0277862
 
 # CMakeLists:
+
+Сборщик сmake находится в папке cmake
 
 Для **float**:
 
@@ -40,5 +44,6 @@ cd build
 cmake .. -DUSE_DOUBLE=ON
 make
 ./sum
+```
 
 Result --> Sum:-0.0277862

@@ -7,4 +7,4 @@ if(USE_DOUBLE)
     add_definitions(-DUSE_DOUBLE)
 endif()
 
-add_executable(sum main.cpp)
+add_executable(sum ../main.cpp)
