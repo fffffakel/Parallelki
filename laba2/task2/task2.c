@@ -11,7 +11,7 @@ const double b = 4.0;
 
 void print_time(double ans,int potoks){
     printf("Кол-во потоков: %d\n",potoks);
-    printf("Время: %.16g\n", ans);
+    printf("Время: %.16f\n", ans);
 }
 
 double func(double x){
