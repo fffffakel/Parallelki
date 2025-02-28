@@ -57,11 +57,6 @@ void simpleIteration(const vector<vector<double>> &A, const vector<double> &b, v
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        cerr << "Использование: " << argv[0] << " <число_потоков>" << endl;
-        return 1;
-    }
-
     int N = 10000;          
     double epsilon = 1e-5; 
     int maxIter = 10000;   
