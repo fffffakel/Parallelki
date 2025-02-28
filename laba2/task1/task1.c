@@ -4,7 +4,7 @@
 
 int print_time(double ans,int potoks){
     printf("Кол-во потоков: %d\n",potoks);
-    printf("Время: %.16g\n", ans);
+    printf("Время: %.16f\n", ans);
 }
 
 int main(int argc, char const *argv[]){   
