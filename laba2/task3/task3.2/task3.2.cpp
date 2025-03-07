@@ -23,13 +23,11 @@ void simpleIteration(const vector<vector<double>> &A, const vector<double> &b, v
     int N = A.size();
     vector<double> x_new(N, 0.0);
 
-    #pragma omp parallel num_threads(numThreads)
-    {
+    for (int iter = 0; iter < maxIter; ++iter) {
         double maxDiff = 0.0;
 
-        for (int iter = 0; iter < maxIter; ++iter) {
-            maxDiff = 0.0;
-
+        #pragma omp parallel num_threads(numThreads) reduction(max:maxDiff)
+        {
             #pragma omp for schedule(dynamic)
             for (int i = 0; i < N; ++i) {
                 double sum = 0.0;
@@ -43,19 +41,19 @@ void simpleIteration(const vector<vector<double>> &A, const vector<double> &b, v
                 x_new[i] = x[i] + t * delta_x;
 
                 double localDiff = abs(x_new[i] - x[i]);
-
-                #pragma omp critical
-                {
-                    if (localDiff > maxDiff) {
-                        maxDiff = localDiff;
-                    }
+                if (localDiff > maxDiff) {
+                    maxDiff = localDiff;
                 }
             }
-            x = x_new;
 
-            if (maxDiff < epsilon) {
-                break;
+            #pragma omp single
+            {
+                x = x_new;
             }
+        }
+
+        if (maxDiff < epsilon) {
+            break;
         }
     }
 }
@@ -78,7 +76,7 @@ int main(int argc, char *argv[]) {
     simpleIteration(A, b, x, epsilon, maxIter, numThreads, t);
     double end_time = omp_get_wtime();
 
-    cout << "Кол-во потоков:" << numThreads << endl;
+    cout << "Кол-во потоков: " << numThreads << endl;
     cout << "Время: " << end_time - start_time << " секунд" << endl;
 
     bool isCorrect = true;
