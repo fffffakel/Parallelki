@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <omp.h>
+#include <stdlib.h>
 
-int print_time(double ans,int potoks){
-    printf("Кол-во потоков: %d\n",potoks);
-    printf("Время: %.16f\n", ans);
+
+int print_time_of_programm(double ans){
+    printf("Время выполнения программы = %.16g\n", ans);
 }
 
 int main(int argc, char const *argv[]){   
@@ -38,7 +38,7 @@ int main(int argc, char const *argv[]){
         }
         }
         
-        double start = omp_get_wtime( );
+        double start_of_programm = omp_get_wtime( );
 
         #pragma omp parallel num_threads(potoks)
         {
@@ -57,9 +57,9 @@ int main(int argc, char const *argv[]){
         }
 
         }
-        double end = omp_get_wtime( );
+        double end_of_programm = omp_get_wtime( );
 
-        print_time(end - start,potoks);
+        print_time_of_programm(end_of_programm - start_of_programm);
 
         free(a);
         free(b);

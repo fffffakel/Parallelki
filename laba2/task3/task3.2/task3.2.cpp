@@ -28,7 +28,7 @@ void simpleIteration(const vector<vector<double>> &A, const vector<double> &b, v
 
         #pragma omp parallel num_threads(numThreads) reduction(max:maxDiff)
         {
-            #pragma omp for schedule(dynamic)
+            #pragma omp for schedule(guided)
             for (int i = 0; i < N; ++i) {
                 double sum = 0.0;
                 for (int j = 0; j < N; ++j) {
