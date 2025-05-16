@@ -22,7 +22,7 @@ void saveMatrixToFile(const std::unique_ptr<double[]>& matrix, int size, const s
         return;
     }
 
-    int fieldWidth = 10; // Ширина поля вывода
+    int fieldWidth = 10;
 
     // запись матрицы в файл
     for (int i = 0; i < size; ++i) {
@@ -84,7 +84,7 @@ int main(int argc, char const *argv[]) {
 
     auto start = std::chrono::high_resolution_clock::now();
     while (iteration < maxIterations && iteration < 10000000 && error > accuracy) {
-        #pragma acc parallel loop independent collapse(2) vector vector_length(16) gang num_gangs(40)
+        #pragma acc parallel loop collapse(2)
         for (size_t i = 1; i < matrixSize - 1; i++) {
             for (size_t j = 1; j < matrixSize - 1; j++) {
                 updatedMatrix[i * matrixSize + j] = 0.25 * (previousMatrix[i * matrixSize + j + 1] + previousMatrix[i * matrixSize + j - 1] + previousMatrix[(i - 1) * matrixSize + j] + previousMatrix[(i + 1) * matrixSize + j]);
@@ -93,7 +93,7 @@ int main(int argc, char const *argv[]) {
 
         if ((iteration + 1) % 10000 == 0) {
             error = 0.0;
-            #pragma acc parallel loop independent collapse(2) vector vector_length(16) gang num_gangs(40) reduction(max:error)
+            #pragma acc parallel loop collapse(2) reduction(max:error)
             for (size_t i = 1; i < matrixSize - 1; i++) {
                 for (size_t j = 1; j < matrixSize - 1; j++) {
                     error = fmax(error, fabs(updatedMatrix[i * matrixSize + j] - previousMatrix[i * matrixSize + j]));

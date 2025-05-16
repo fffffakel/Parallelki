@@ -87,7 +87,7 @@ int main(int argc, char const *argv[]) {
     #pragma acc data copyin(error, previousMatrix[0:size * size], currentMatrix[0:size * size])
     {
         while (iteration < maxIterations && error > accuracy) {
-            #pragma acc parallel loop independent collapse(2) vector vector_length(256) gang num_gangs(1024) present(currentMatrix, previousMatrix)
+            #pragma acc parallel loop independent collapse(2) present(currentMatrix, previousMatrix)
             for (size_t i = 1; i < size - 1; ++i) {
                 for (size_t j = 1; j < size - 1; ++j) {
                     currentMatrix[i * size + j] = 0.25 * (previousMatrix[i * size + j + 1] + previousMatrix[i * size + j - 1] + previousMatrix[(i - 1) * size + j] + previousMatrix[(i + 1) * size + j]);
@@ -96,8 +96,8 @@ int main(int argc, char const *argv[]) {
 
             if ((iteration + 1) % 10000 == 0) {
                 error = 0.0;
-                #pragma acc update device(error)
-                #pragma acc parallel loop independent collapse(2) vector vector_length(1024) gang num_gangs(256) reduction(max:error) present(currentMatrix, previousMatrix)
+                #pragma acc update device(error) //копирует новое значение 0.0 с CPU на GPU
+                #pragma acc parallel loop independent collapse(2) reduction(max:error) present(currentMatrix, previousMatrix)
                 for (size_t i = 1; i < size - 1; ++i) {
                     for (size_t j = 1; j < size - 1; ++j) {
                         error = fmax(error, fabs(currentMatrix[i * size + j] - previousMatrix[i * size + j]));
@@ -111,6 +111,8 @@ int main(int argc, char const *argv[]) {
             double* temp = currentMatrix;
             currentMatrix = previousMatrix;
             previousMatrix = temp;
+
+            // std::swap(previousMatrix,currentMatrix);
             
             ++iteration;
         }
